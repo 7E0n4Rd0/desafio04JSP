@@ -6,10 +6,10 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import com.devsuperior.dsmeta.dto.SaleSellerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import com.devsuperior.dsmeta.dto.SaleMinDTO;
@@ -21,31 +21,21 @@ public class SaleService {
 
 	@Autowired
 	private SaleRepository repository;
-	
+
 	public SaleMinDTO findById(Long id) {
 		Optional<Sale> result = repository.findById(id);
 		Sale entity = result.get();
 		return new SaleMinDTO(entity);
 	}
 
-	public Page<SaleMinDTO> getReport(String minDate, String maxDate, String sellerName, Pageable pageable){
-
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	public Page<SaleSellerDTO> getReport(String minDate, String maxDate, String sellerName, Pageable pageable){
 		LocalDate today = LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault());
-		LocalDate result = today.minusYears(1L);
 
-		if(minDate.isEmpty() && maxDate.isEmpty()){
-			maxDate = today.format(dateTimeFormatter);
-			minDate = result.format(dateTimeFormatter);
-		}else if(minDate.isEmpty()){
-			minDate = result.format(dateTimeFormatter);
-		}else if(maxDate.isEmpty()){
-			maxDate = today.format(dateTimeFormatter);
-		}
+		LocalDate max = maxDate.equals("") ? today : LocalDate.parse(maxDate);
+		LocalDate min = minDate.equals("") ? today.minusYears(1L) : LocalDate.parse(minDate);
 
-		Page<SaleMinDTO> page = repository.getReport(LocalDate.parse(minDate), LocalDate.parse(maxDate), sellerName, pageable);
-
-		return page;
+		Page<Sale> page = repository.getReport(min, max, sellerName, pageable);
+		return page.map(SaleSellerDTO::new);
 	}
 
 }
