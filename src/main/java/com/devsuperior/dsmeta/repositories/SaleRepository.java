@@ -14,9 +14,9 @@ import java.time.LocalDate;
 @Repository
 public interface SaleRepository extends JpaRepository<Sale, Long> {
 
-    @Query("SELECT obj FROM Sale obj " +
+    @Query("SELECT new com.devsuperior.dsmeta.dto.SaleMinDTO(obj.id, obj.amount, obj.date) FROM Sale obj " +
             "WHERE obj.date BETWEEN :minDate AND :maxDate AND UPPER(obj.seller.name) " +
             "LIKE UPPER(CONCAT('%',:sellerName,'%'))")
-    Page<Sale> getReport(LocalDate minDate, LocalDate maxDate, String sellerName, Pageable pageable);
+    Page<SaleMinDTO> getReport(LocalDate minDate, LocalDate maxDate, String sellerName, Pageable pageable);
 
 }

@@ -43,9 +43,9 @@ public class SaleService {
 			maxDate = today.format(dateTimeFormatter);
 		}
 
-		Page<Sale> page = repository.getReport(LocalDate.parse(minDate), LocalDate.parse(maxDate), sellerName, pageable);
+		Page<SaleMinDTO> page = repository.getReport(LocalDate.parse(minDate), LocalDate.parse(maxDate), sellerName, pageable);
 
-		return page.map(SaleMinDTO::new);
+		return page;
 	}
 
 }
