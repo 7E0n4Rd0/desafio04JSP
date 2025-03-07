@@ -1,4 +1,4 @@
-# **Desafio 04 - Curso Java Spring Expert: Módulo 04**
+# **Desafio 04 - Curso Java Spring Professional: Módulo 04**
 ### Enunciado
 Trata-se de um sistema de vendas (Sale) e vendedores (Seller). Cada venda está para um vendedor, e um vendedor pode ter várias vendas.
 Você deverá implementar as seguintes consultas (ambas deverão estar corretas):
